@@ -61,8 +61,8 @@ def load_data(prefix, normalize=True, load_walks=False):
 
     if normalize and not feats is None:
         from sklearn.preprocessing import StandardScaler
-        print(id_map)
-        train_ids = np.array([id_map[n] for n in G.nodes() if not G.nodes[n]['val'] and not G.nodes[n]['test']])
+        # print(id_map)
+        train_ids = np.array([id_map[str(n)] for n in G.nodes() if not G.nodes[n]['val'] and not G.nodes[n]['test']])
         train_feats = feats[train_ids]
         scaler = StandardScaler()
         scaler.fit(train_feats)
