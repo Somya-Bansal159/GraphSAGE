@@ -81,7 +81,7 @@ class EdgeMinibatchIterator(object):
             if self.G.nodes[nodeid]['test'] or self.G.nodes[nodeid]['val']:
                 continue
             print(self.id2idx)
-            neighbors = np.array([self.id2idx[neighbor] 
+            neighbors = np.array([self.id2idx[str(neighbor)] 
                 for neighbor in self.G.neighbors(nodeid)
                 if (not self.G[nodeid][neighbor]['train_removed'])])
             deg[self.id2idx[nodeid]] = len(neighbors)
@@ -97,7 +97,7 @@ class EdgeMinibatchIterator(object):
     def construct_test_adj(self):
         adj = len(self.id2idx)*np.ones((len(self.id2idx)+1, self.max_degree))
         for nodeid in self.G.nodes():
-            neighbors = np.array([self.id2idx[neighbor] 
+            neighbors = np.array([self.id2idx[str(neighbor)] 
                 for neighbor in self.G.neighbors(nodeid)])
             if len(neighbors) == 0:
                 continue
