@@ -80,6 +80,7 @@ class EdgeMinibatchIterator(object):
         for nodeid in self.G.nodes():
             if self.G.nodes[nodeid]['test'] or self.G.nodes[nodeid]['val']:
                 continue
+            print(self.id2idx)
             neighbors = np.array([self.id2idx[neighbor] 
                 for neighbor in self.G.neighbors(nodeid)
                 if (not self.G[nodeid][neighbor]['train_removed'])])
