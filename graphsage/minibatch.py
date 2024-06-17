@@ -80,18 +80,18 @@ class EdgeMinibatchIterator(object):
         for nodeid in self.G.nodes():
             if self.G.nodes[nodeid]['test'] or self.G.nodes[nodeid]['val']:
                 continue
-            print(self.id2idx)
+            # print(self.id2idx)
             neighbors = np.array([self.id2idx[str(neighbor)] 
                 for neighbor in self.G.neighbors(nodeid)
                 if (not self.G[nodeid][neighbor]['train_removed'])])
-            deg[self.id2idx[nodeid]] = len(neighbors)
+            deg[self.id2idx[str(nodeid)]] = len(neighbors)
             if len(neighbors) == 0:
                 continue
             if len(neighbors) > self.max_degree:
                 neighbors = np.random.choice(neighbors, self.max_degree, replace=False)
             elif len(neighbors) < self.max_degree:
                 neighbors = np.random.choice(neighbors, self.max_degree, replace=True)
-            adj[self.id2idx[nodeid], :] = neighbors
+            adj[self.id2idx[str(nodeid)], :] = neighbors
         return adj, deg
 
     def construct_test_adj(self):
@@ -105,7 +105,7 @@ class EdgeMinibatchIterator(object):
                 neighbors = np.random.choice(neighbors, self.max_degree, replace=False)
             elif len(neighbors) < self.max_degree:
                 neighbors = np.random.choice(neighbors, self.max_degree, replace=True)
-            adj[self.id2idx[nodeid], :] = neighbors
+            adj[self.id2idx[str(nodeid)], :] = neighbors
         return adj
 
     def end(self):
@@ -115,8 +115,8 @@ class EdgeMinibatchIterator(object):
         batch1 = []
         batch2 = []
         for node1, node2 in batch_edges:
-            batch1.append(self.id2idx[node1])
-            batch2.append(self.id2idx[node2])
+            batch1.append(self.id2idx[str(node1)])
+            batch2.append(self.id2idx[str(node2)])
 
         feed_dict = dict()
         feed_dict.update({self.placeholders['batch_size'] : len(batch_edges)})
