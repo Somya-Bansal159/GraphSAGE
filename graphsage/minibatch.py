@@ -49,24 +49,24 @@ class EdgeMinibatchIterator(object):
             else:
                 self.train_edges = self.val_edges = self.edges
 
-        print(len([n for n in G.nodes() if not G.node[n]['test'] and not G.node[n]['val']]), 'train nodes')
-        print(len([n for n in G.nodes() if G.node[n]['test'] or G.node[n]['val']]), 'test nodes')
+        print(len([n for n in G.nodes() if not G.nodes[n]['test'] and not G.nodes[n]['val']]), 'train nodes')
+        print(len([n for n in G.nodes() if G.nodes[n]['test'] or G.nodes[n]['val']]), 'test nodes')
         self.val_set_size = len(self.val_edges)
 
     def _n2v_prune(self, edges):
-        is_val = lambda n : self.G.node[n]["val"] or self.G.node[n]["test"]
+        is_val = lambda n : self.G.nodes[n]["val"] or self.G.nodes[n]["test"]
         return [e for e in edges if not is_val(e[1])]
 
     def _remove_isolated(self, edge_list):
         new_edge_list = []
         missing = 0
         for n1, n2 in edge_list:
-            if not n1 in self.G.node or not n2 in self.G.node:
+            if not n1 in self.G.nodes or not n2 in self.G.nodes:
                 missing += 1
                 continue
             if (self.deg[self.id2idx[n1]] == 0 or self.deg[self.id2idx[n2]] == 0) \
-                    and (not self.G.node[n1]['test'] or self.G.node[n1]['val']) \
-                    and (not self.G.node[n2]['test'] or self.G.node[n2]['val']):
+                    and (not self.G.nodes[n1]['test'] or self.G.nodes[n1]['val']) \
+                    and (not self.G.nodes[n2]['test'] or self.G.nodes[n2]['val']):
                 continue
             else:
                 new_edge_list.append((n1,n2))
@@ -78,7 +78,7 @@ class EdgeMinibatchIterator(object):
         deg = np.zeros((len(self.id2idx),))
 
         for nodeid in self.G.nodes():
-            if self.G.node[nodeid]['test'] or self.G.node[nodeid]['val']:
+            if self.G.nodes[nodeid]['test'] or self.G.nodes[nodeid]['val']:
                 continue
             neighbors = np.array([self.id2idx[neighbor] 
                 for neighbor in self.G.neighbors(nodeid)
